@@ -89,19 +89,34 @@
 				parse: function(result) {
 					var meta = {};
 					switch(result.hostname) {
-						case "youtube.com":
-						case "www.youtube.com":
+						case "www.amazon.com":
 							meta = {
-								type: 'video',
-								provider: 'youtube',
-								id: result.params.v
-							};
+								type: 'product',
+								source: 'amazon',
+								id: result.pathname.match("/([a-zA-Z0-9]{10})(?:[/?]|$)")[1]
+							}
 						break;
 						case "youtu.be":
 							meta = {
 								type: 'video',
-								provider: 'youtube',
+								source: 'youtube',
 								id: result.pathname.substring(1)
+							};
+						break;
+						case "youtube.com":
+						case "www.youtube.com":
+							meta = {
+								type: 'video',
+								source: 'youtube',
+								id: result.params.v
+							};
+						break;
+						case "vimeo.com":
+							var tmp = result.pathname.split("/");
+							meta = {
+								type: 'video',
+								source: 'vimeo',
+								id: tmp[tmp.length - 1]
 							};
 						break;
 					}
