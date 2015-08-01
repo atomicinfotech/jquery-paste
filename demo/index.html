@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>jQuery Paste</title>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		<script src="../src/jquery.paste.js"></script>
+		<link href="../src/jquery.paste.css" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+		
+	</head>
+	<body>
+		<div
+			id="container-paste"
+			data-toggle="tooltip"
+			data-placement="right"
+			title="Try pasting a url">
+			<i class="fa fa-clipboard"></i>
+			<span class="paste-status"></span>
+		</div>
+		<script>
+			$(function() {
+				$("#container-paste").paste({
+					propertyName: "a custom value"
+				});
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,13 @@
+#container-paste {
+	position: fixed;
+	bottom: 30px;
+	left: 30px;
+	color: white;
+	background-color: rgba(10,10,10,.5);
+	padding: 6px;
+	border-radius: 10px;
+}
+
+#container-paste.failed {
+	background-color: rgba(200,10,10,.5);
+}
