@@ -29,14 +29,36 @@
 					this.reset();
 					
 					this.$element.bind( "paste.failed", $.proxy(this.failed, this));
-					$('body').on('paste',this.process);	
+					$('body').on('paste',$.proxy(this.process, this));	
 			
 				},
 				process: function (e) {
+					var result = {};
 					var $target = $(e.target);
 				
 					if( !$target.is('input') && !$target.is('textarea') && !$target.attr('contenteditable') ) {
-						var pasted = e.originalEvent.clipboardData.getData('Text');
+						result.pasted = e.originalEvent.clipboardData.getData('Text');
+						
+						//lets see if it is a url
+						if (result.pasted.indexOf('http') === 0) {
+							result.isURL = true;
+							
+							var a = document.createElement('a'); a.href=result.pasted;
+							
+							result.protocol = a.protocol;
+							result.hostname = a.hostname;
+							if(result.port) result.port = a.port;
+							result.pathname = a.pathname;
+							result.search = a.search;
+							result.hash = a.hash;
+							result.host = a.host; 
+							
+							result.params = this.urlparams(a.search.substr(1).split('&'));
+							result.meta = this.parse(result);
+							
+						}
+						
+						if(typeof this.settings.callback == "function") this.settings.callback(result);
 					}
 
 				},
@@ -51,6 +73,42 @@
 						self.reset();
 					},2000);
 				},
+				urlparams: function(a) {
+					if (a == "") return {};
+					var b = {};
+					for (var i = 0; i < a.length; ++i)
+					{
+							var p=a[i].split('=', 2);
+							if (p.length == 1)
+									b[p[0]] = "";
+							else
+									b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+					}
+					return b;
+				},
+				parse: function(result) {
+					var meta = {};
+					switch(result.hostname) {
+						case "youtube.com":
+						case "www.youtube.com":
+							meta = {
+								type: 'video',
+								provider: 'youtube',
+								id: result.params.v
+							};
+						break;
+						case "youtu.be":
+							meta = {
+								type: 'video',
+								provider: 'youtube',
+								id: result.pathname.substring(1)
+							};
+						break;
+					}
+					
+					return meta;
+				}
+
 		});
 
 		// A really lightweight plugin wrapper around the constructor,
