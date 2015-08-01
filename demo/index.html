@@ -2,15 +2,33 @@
 <html>
 	<head>
 		<title>jQuery Paste</title>
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/highlight.min.js"></script>
 		<script src="../src/jquery.paste.js"></script>
-		<link href="../src/jquery.paste.css" rel="stylesheet" type="text/css">
+		
+		
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-		
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.7/styles/codepen-embed.min.css">
+		<link href="../src/jquery.paste.css" rel="stylesheet" type="text/css">
 	</head>
 	<body>
+		
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6">
+					<h3>Result</h3>
+					<pre><code class="javascript" id="container-preview">Paste something!</code></pre>
+				</div>
+				<div class="col-md-6">
+				</div>
+			</div>
+		</div>
+		
+		
+		
+		
 		<div
 			id="container-paste"
 			data-toggle="tooltip"
@@ -21,9 +39,16 @@
 		</div>
 		<script>
 			$(function() {
+				
 				$("#container-paste").paste({
-					propertyName: "a custom value"
+					callback: function(result) {
+						$('#container-preview').html(JSON.stringify(result,null,2));
+						hljs.highlightBlock($('#container-preview')[0]);
+							
+						//Prism.highlightAll();
+					}
 				});
+				
 			});
 		</script>
 	</body>
