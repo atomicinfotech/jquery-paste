@@ -29,37 +29,45 @@
 					this.reset();
 					
 					this.$element.bind( "paste.failed", $.proxy(this.failed, this));
-					$('body').on('paste',$.proxy(this.process, this));	
+					
+					this.$element.bind( "paste.simulate", $.proxy(function(e){
+						this.process(this.$element.data('pasted'));
+					}, this));
+					
+					$('body').on('paste',$.proxy(function(e) {
+						var $target = $(e.target);
+						if( !$target.is('input') && !$target.is('textarea') && !$target.attr('contenteditable') ) {
+							this.process(e.originalEvent.clipboardData.getData('Text'));
+						}
+					}, this));	
 			
 				},
-				process: function (e) {
-					var result = {};
-					var $target = $(e.target);
-				
-					if( !$target.is('input') && !$target.is('textarea') && !$target.attr('contenteditable') ) {
-						result.pasted = e.originalEvent.clipboardData.getData('Text');
+				process: function (pasted) {
+					var result = {
+						pasted: pasted
+					};
 						
-						//lets see if it is a url
-						if (result.pasted.indexOf('http') === 0) {
-							result.isURL = true;
-							
-							var a = document.createElement('a'); a.href=result.pasted;
-							
-							result.protocol = a.protocol;
-							result.hostname = a.hostname;
-							if(result.port) result.port = a.port;
-							result.pathname = a.pathname;
-							result.search = a.search;
-							result.hash = a.hash;
-							result.host = a.host; 
-							
-							result.params = this.urlparams(a.search.substr(1).split('&'));
-							result.meta = this.parse(result);
-							
-						}
+					//lets see if it is a url
+					if (result.pasted.indexOf('http') === 0) {
+						result.isURL = true;
 						
-						if(typeof this.settings.callback == "function") this.settings.callback(result);
+						var a = document.createElement('a'); a.href=result.pasted;
+						
+						result.protocol = a.protocol;
+						result.hostname = a.hostname;
+						if(result.port) result.port = a.port;
+						result.pathname = a.pathname;
+						result.search = a.search;
+						result.hash = a.hash;
+						result.host = a.host; 
+						
+						result.params = this.urlparams(a.search.substr(1).split('&'));
+						result.meta = this.parse(result);
+						
 					}
+					
+					if(typeof this.settings.callback == "function") this.settings.callback(result);
+				
 
 				},
 				reset: function() {

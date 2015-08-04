@@ -16,18 +16,40 @@
 	<body>
 		
 		<div class="container">
+			<h1>jQuery Paste Demo</h1>
+			<p>
+				Try pasting text or a URL anywhere on the page.  If you don't paste a 
+				URL, we'll trigger the 'failed' event.
+			</p>
+			
+			<p> You can paste whatever you'd like.  Alternatively, here are a couple
+				of simulation buttons for demonstration.
+			</p>
+		
+			<h3>Simulation Buttons</h3>
+			<button type="button" class="btn btn-default btn-simulate" data-target="#container-paste" data-pasted="https://www.youtube.com/watch?v=2L5kr3Nrliw">
+				YouTube URL
+			</button>
+			<button type="button" class="btn btn-default btn-simulate" data-target="#container-paste" data-pasted="http://www.amazon.com/Haribo-Gummi-Candy-Gold-Bears-5-Pound/dp/B000EVOSE4/">
+				Amazon URL
+			</button>
+			<button type="button" class="btn btn-danger btn-simulate" data-target="#container-paste" data-pasted="aljksdjlkasdjklajlksdfjkl">
+				Random Text
+			</button>
+
+
 			<div class="row">
 				<div class="col-md-6">
 					<h3>Result</h3>
-					<pre><code class="javascript" id="container-preview">Paste something!</code></pre>
+						<pre><code class="javascript" id="container-preview">Paste something!</code></pre>
 				</div>
 				<div class="col-md-6">
 				</div>
+				
 			</div>
 		</div>
 		
-		
-		
+		<iframe style="width:120px;height:240px;" marginwidth="0" marginheight="0" scrolling="no" frameborder="0" src="http://ws-na.amazon-adsystem.com/widgets/q?ServiceVersion=20070822&OneJS=1&Operation=GetAdHtml&MarketPlace=US&source=ac&ref=tf_til&ad_type=product_link&tracking_id=sledgehammers-20&marketplace=amazon&region=US&placement=B000EVOSE4&asins=B000EVOSE4&linkId=QH5FVSLV3K44WLI6&show_border=true&link_opens_in_new_window=true"></iframe>
 		
 		<div
 			id="container-paste"
@@ -38,15 +60,26 @@
 			<span class="paste-status"></span>
 		</div>
 		<script>
+			var example1;
 			$(function() {
+				hljs.initHighlightingOnLoad();
+				$('[data-toggle="tooltip"]').tooltip();
 				
-				$("#container-paste").paste({
+				example1 = $("#container-paste").paste({
 					callback: function(result) {
 						$('#container-preview').html(JSON.stringify(result,null,2));
 						hljs.highlightBlock($('#container-preview')[0]);
 							
 						//Prism.highlightAll();
 					}
+				});
+				
+				//handle simulations
+				$('.btn-simulate').click(function(e) {
+					$btn = $(this);
+					target = $btn.data('target');
+					pasted = $btn.data('pasted');
+					$(target).data('pasted',pasted).trigger('paste.simulate');
 				});
 				
 			});
