@@ -76,13 +76,26 @@
 				reset: function() {
 					this.$element.removeClass('failed').children('.paste-status').html(this.settings.status);
 				},
-				failed: function(e) {
+				failed: function(e, opt) {
 					self = this;
-					this.$element.addClass('failed').children('.paste-status').html("Sorry");
+					
+					//defaults
+					var message = "Sorry, we we didn't recognize the pasted content", 
+					    delay = 2000;
+					
+					if(typeof opt === 'string')
+						message = opt;
+					
+					if(typeof opt === 'object'){
+						if(opt.message) message = opt.message;
+						if(opt.delay)   delay = opt.delay;
+					}
+						
+					this.$element.addClass('failed').children('.paste-status').html(message);
 					
 					window.setTimeout(function(){
 						self.reset();
-					},2000);
+					},delay);
 				},
 				urlparams: function(a) {
 					if (a == "") return {};

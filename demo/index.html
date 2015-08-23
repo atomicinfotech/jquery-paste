@@ -69,7 +69,10 @@
 					callback: function(result) {
 						$('#container-preview').html(JSON.stringify(result,null,2));
 						hljs.highlightBlock($('#container-preview')[0]);
-							
+						
+						if(!result.isURL) {
+							$("#container-paste").trigger('paste.failed','Sorry, that was not a URL');
+						}	
 						//Prism.highlightAll();
 					}
 				});
