@@ -127,6 +127,16 @@
 								id: tmp[tmp.length - 1]
 							};
 						break;
+						case "www.yelp.com":
+							var tmp = result.pathname.split("/");
+							console.log(tmp);
+							if(tmp[1] == 'biz')
+								meta = {
+									type: 'website',
+									source: 'yelp',
+									id: tmp[tmp.length - 1]
+								};
+						break;
 					}
 					
 					return meta;
