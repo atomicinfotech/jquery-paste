@@ -1,5 +1,8 @@
-// the semi-colon before function invocation is a safety net against concatenated
-// scripts and/or other plugins which may not be closed properly.
+/*!
+ * jquery-paste v0.0.1 (https://github.com/atomicinfotech/jquery-paste)
+ * Copyright 2015 Atomic Infotech LLC
+ * Licensed under MIT (https://github.com/atomicinfotech/jquery-paste/blob/master/LICENSE)
+ */
 ;(function ( $, window, document, undefined ) {
 
 	"use strict";
@@ -102,7 +105,7 @@
 								type: 'product',
 								source: 'amazon',
 								id: result.pathname.match("/([a-zA-Z0-9]{10})(?:[/?]|$)")[1]
-							}
+							};
 						break;
 						case "youtu.be":
 							meta = {
@@ -129,7 +132,6 @@
 						break;
 						case "www.yelp.com":
 							var tmp = result.pathname.split("/");
-							console.log(tmp);
 							if(tmp[1] == 'biz')
 								meta = {
 									type: 'website',
@@ -147,11 +149,11 @@
 		// A really lightweight plugin wrapper around the constructor,
 		// preventing against multiple instantiations
 		$.fn[ pluginName ] = function ( options ) {
-				return this.each(function() {
-						if ( !$.data( this, "plugin_" + pluginName ) ) {
-								$.data( this, "plugin_" + pluginName, new Plugin( this, options ) );
-						}
-				});
+			return this.each(function() {
+				if ( !$.data( this, "plugin_" + pluginName ) ) {
+						$.data( this, "plugin_" + pluginName, new Plugin( this, options ) );
+				}
+			});
 		};
 
 })( jQuery, window, document );
